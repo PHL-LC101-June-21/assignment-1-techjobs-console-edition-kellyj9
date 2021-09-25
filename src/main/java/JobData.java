@@ -67,6 +67,7 @@ public class JobData {
      */
     public static ArrayList<HashMap<String, String>> findByColumnAndValue(String column, String value) {
 
+        value = value.toLowerCase();
         // load data, if not already loaded
         loadData();
 
@@ -76,7 +77,7 @@ public class JobData {
 
             String aValue = row.get(column);
 
-            if (aValue.toLowerCase().contains(value.toLowerCase())) {
+            if (aValue.toLowerCase().contains(value)) {
                 jobs.add(row);
             }
         }
@@ -91,23 +92,30 @@ public class JobData {
      * @return      List of all jobs with at least one field containing the value
      */
     public static ArrayList<HashMap<String, String>> findByValue(String value) {
+
         // load data, if not already loaded
         loadData();
         // TODO - implement this method
         ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
-        if (value.isEmpty()) {
-            return jobs;
-        }
-        StringBuilder tempStr = new StringBuilder();
+//        if (value.isEmpty()) {
+//            return jobs;
+//        }
+        value = value.toLowerCase();
+        //StringBuilder tempStr = new StringBuilder();
 
+        boolean containsValue; // flag to break out of the loop (to avoid using "break" within if statement)
         for (HashMap<String, String> entry : allJobs) {
             for (String key : entry.keySet()) {
-                tempStr.append(entry.get(key));
+                //tempStr.append(entry.get(key));
+                if (entry.get(key).toLowerCase().contains(value)) {
+                    jobs.add(entry);
+                    break;
+                }
             }
-            if (tempStr.toString().toLowerCase().contains(value.toLowerCase())) {
-                jobs.add(entry);
-            }
-            tempStr = new StringBuilder();
+            //if (tempStr.toString().toLowerCase().contains(value.toLowerCase())) {
+                //jobs.add(entry);
+            //}
+            //tempStr = new StringBuilder();
         }
 
         return jobs;
