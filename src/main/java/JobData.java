@@ -67,22 +67,25 @@ public class JobData {
      */
     public static ArrayList<HashMap<String, String>> findByColumnAndValue(String column, String value) {
 
-        value = value.toLowerCase();
         // load data, if not already loaded
         loadData();
 
+        value = value.toLowerCase();
         ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
 
+        /* for each job in the full jobs list, loop through and
+           check if the column value contains the search term */
         for (HashMap<String, String> row : allJobs) {
 
             String aValue = row.get(column);
-
+            /* for the current job, if the column value (case insensitive) contains the search term,
+               add the job to the temp jobs list. */
             if (aValue.toLowerCase().contains(value)) {
                 jobs.add(row);
             }
         }
 
-        return jobs;
+        return jobs; // return the temp jobs list
     }
 
     /**
@@ -95,30 +98,27 @@ public class JobData {
 
         // load data, if not already loaded
         loadData();
-        // TODO - implement this method
-        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
-//        if (value.isEmpty()) {
-//            return jobs;
-//        }
-        value = value.toLowerCase();
-        //StringBuilder tempStr = new StringBuilder();
 
-        boolean containsValue; // flag to break out of the loop (to avoid using "break" within if statement)
-        for (HashMap<String, String> entry : allJobs) {
-            for (String key : entry.keySet()) {
-                //tempStr.append(entry.get(key));
-                if (entry.get(key).toLowerCase().contains(value)) {
-                    jobs.add(entry);
-                    break;
+        // TODO - implement this method
+        value = value.toLowerCase();  // to ensure case insensitivity of search term
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>(); /* temp jobs list will hold any jobs..
+                                                                        that contain the seach term */
+        /* for each job in the full jobs list, loop through and
+           check if any of the column values contain the search term */
+        for (HashMap<String, String> row : allJobs) {
+            for (String currentColumn : row.keySet()) {
+                /* for the current job, if the column value (case insensitive) contains the search term,
+                   add the job to the temp jobs list. */
+                if (row.get(currentColumn).toLowerCase().contains(value)) {
+                    jobs.add(row);
+                    break; /* search term was found for a column, so move to the next job now
+                            (to prevent duplicates of the current job in the temp jobs list
+                            if more than one column contains the search key) */
                 }
             }
-            //if (tempStr.toString().toLowerCase().contains(value.toLowerCase())) {
-                //jobs.add(entry);
-            //}
-            //tempStr = new StringBuilder();
         }
 
-        return jobs;
+        return jobs; // return the temp jobs list
     }
 
     /**
