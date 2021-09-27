@@ -5,7 +5,10 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by LaunchCode
@@ -62,7 +65,7 @@ public class JobData {
      * with "Enterprise Holdings, Inc".
      *
      * @param column   Column that should be searched.
-     * @param value Value of teh field to search for
+     * @param value Value of the field to search for
      * @return List of all jobs matching the criteria
      */
     public static ArrayList<HashMap<String, String>> findByColumnAndValue(String column, String value) {
@@ -78,7 +81,7 @@ public class JobData {
         for (HashMap<String, String> row : allJobs) {
 
             String aValue = row.get(column);
-            /* for the current job, if the column value (case insensitive) contains the search term,
+            /* for the current job, if the column value (caseinsensitive) contains the search term,
                add the job to the temp jobs list. */
             if (aValue.toLowerCase().contains(value)) {
                 jobs.add(row);
@@ -101,8 +104,8 @@ public class JobData {
 
         // TODO - implement this method
         value = value.toLowerCase();  // to ensure case insensitivity of search term
-        ArrayList<HashMap<String, String>> jobs = new ArrayList<>(); /* temp jobs list will hold any jobs..
-                                                                        that contain the seach term */
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>(); /* temp jobs list will hold any jobs
+                                                                        that contain the search term */
         /* for each job in the full jobs list, loop through and
            check if any of the column values contain the search term */
         for (HashMap<String, String> row : allJobs) {
