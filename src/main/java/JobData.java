@@ -15,10 +15,10 @@ import java.util.List;
  */
 public class JobData {
 
-    private static final String DATA_FILE = "src/main/resources/job_data.csv";
-    private static boolean isDataLoaded = false;
+    private static final String DATA_FILE = "src/main/resources/job_data.csv"; // path to the source of the job data
+    private static boolean isDataLoaded = false; // true after the jobs data is loaded into the list of jobs
 
-    private static ArrayList<HashMap<String, String>> allJobs;
+    private static ArrayList<HashMap<String, String>> allJobs; // will hold full list of jobs after that data is loaded
 
     /**
      * Fetch list of all values from loaded data,
@@ -32,29 +32,56 @@ public class JobData {
         // load data, if not already loaded
         loadData();
 
-        ArrayList<String> values = new ArrayList<>();
+        ArrayList<String> values = new ArrayList<>(); // will hold a temp list of unique volues for the column
 
+        // for each job in the jobs list, get each value for the column...
         for (HashMap<String, String> row : allJobs) {
             String aValue = row.get(field);
-
+            //...if the current value for the column isn't already in the list,
+            // then add it to the temporary list of unique values for the column
             if (!values.contains(aValue)) {
                 values.add(aValue);
             }
         }
 
         // Bonus mission: sort the results
+        // the Collections.sort method sorts the Strings in the ArrayList in ascending order
         Collections.sort(values);
 
-        return values;
+        return values; // return the temp list of unique values for the column
     }
 
+
+    /**
+     * Fetch list of all columns and values for all jobs from loaded data
+     *
+     *
+     * @return copy of the list of all the job data that was loaded
+     */
     public static ArrayList<HashMap<String, String>> findAll() {
 
         // load data, if not already loaded
         loadData();
 
         // Bonus mission; normal version returns allJobs
-        return new ArrayList<>(allJobs);
+
+        // create an empty arraylist to hold a copy of the global list containing loaded jobs data
+        ArrayList<HashMap<String, String>> allJobsCopy = new ArrayList<>();
+
+        // for each job in the global list of loaded jobs data....
+        for (HashMap<String, String> row : allJobs) {
+            // Create an empty HashMap
+            HashMap<String, String> myMap = new HashMap<>();
+            // for each column in the current row, add the key (column) / value pairs for the job to the hashmap
+            for (String column : row.keySet()) {
+                myMap.put(column, row.get(column));
+            }
+            // add the temporary HashMap to the temporary list of all jobs
+            allJobsCopy.add(myMap);
+        }
+
+        return allJobsCopy; // return the copy of the allJobs list
+        // return new ArrayList<>(allJobs);
     }
 
     /**
@@ -65,7 +92,7 @@ public class JobData {
      * with "Enterprise Holdings, Inc".
      *
      * @param column   Column that should be searched.
-     * @param value Value of teh field to search for
+     * @param value Value of the field to search for
      * @return List of all jobs matching the criteria
      */
     public static ArrayList<HashMap<String, String>> findByColumnAndValue(String column, String value) {
@@ -73,18 +100,22 @@ public class JobData {
         // load data, if not already loaded
         loadData();
 
+        value = value.toLowerCase();
         ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
 
+        /* for each job in the full jobs list, loop through and
+           check if the column value contains the search term */
         for (HashMap<String, String> row : allJobs) {
 
             String aValue = row.get(column);
-
-            if (aValue.contains(value)) {
+            /* for the current job, if the column value (caseinsensitive) contains the search term,
+               add the job to the temp jobs list. */
+            if (aValue.toLowerCase().contains(value)) {
                 jobs.add(row);
             }
         }
 
-        return jobs;
+        return jobs; // return the temp jobs list
     }
 
     /**
@@ -99,7 +130,25 @@ public class JobData {
         loadData();
 
         // TODO - implement this method
-        return null;
+        value = value.toLowerCase();  // to ensure case insensitivity of search term
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>(); /* temp jobs list will hold any jobs
+                                                                        that contain the search term */
+        /* for each job in the full jobs list, loop through and
+           check if any of the column values contain the search term */
+        for (HashMap<String, String> row : allJobs) {
+            for (String currentColumn : row.keySet()) {
+                /* for the current job, if the column value (case insensitive) contains the search term,
+                   add the job to the temp jobs list. */
+                if (row.get(currentColumn).toLowerCase().contains(value)) {
+                    jobs.add(row);
+                    break; /* search term was found for a column, so move to the next job now
+                            (to prevent duplicates of the current job in the temp jobs list
+                            if more than one column contains the search key) */
+                }
+            }
+        }
+
+        return jobs; // return the temp jobs list
     }
 
     /**
