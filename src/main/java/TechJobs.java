@@ -117,19 +117,21 @@ public class TechJobs {
         return choiceKeys[choiceIdx];
     }
 
-    // Print a list of jobs
+    // Display a list of the job results
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
         // if no job results to display, display a message to inform user
         if (someJobs.isEmpty()) {
             System.out.print("No Results");
         }
         else {
-            // for each job result, loop through and display the columns and values for the job result
-            for (HashMap<String, String> entry : someJobs) {
+            // for each job result...
+            for (HashMap<String, String> row : someJobs) {
                 System.out.println("\n*****");
-                for (String key : entry.keySet()) {
-                    System.out.println(key + ": " + entry.get(key));
+                // ...display the columns and values for the current job result
+                for (String column : row.keySet()) {
+                    System.out.println(column + ": " + row.get(column));
                 }
+
                 System.out.println("*****");
             }
         }
